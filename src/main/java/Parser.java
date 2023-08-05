@@ -12,9 +12,11 @@ public class Parser {
 
     static List<WeatherSlot> weatherSlots = new ArrayList<WeatherSlot>();
 
-    private static Document getPage() throws IOException {
-        String url = "http://sinoptik.ua/";
-        Document page = Jsoup.parse(new URL(url), 3000);
+    static StringBuilder builder = new StringBuilder();
+
+    private static Document getPage(String city) throws IOException {
+        String url = "http://sinoptik.ua/погода-";
+        Document page = Jsoup.parse(new URL(url.concat(city)), 3000);
         return page;
     }
 
@@ -65,9 +67,8 @@ public class Parser {
         }
     }
 
-
-    public static void main(String[] args) throws Exception {
-        Document page = getPage();
+    String findWeatherForecast(String city) throws IOException {
+        Document page = getPage(city);
         createWeatherSlots();
         Element tBodyElement = page.select("tbody").first();
         Element grayTimeElement = tBodyElement.select("tr[class=gray time]").first();
@@ -77,10 +78,11 @@ public class Parser {
         setTimes(page, grayTimeElement);
         setTemperatures(page, temperatureSensElement);
         setHumidities(page, grayElement);
-
+        builder.append("Прогноз погоды для города " + city + "\n");
+        builder.append("__________________________________" + "\n");
         for (WeatherSlot weatherSlot : weatherSlots) {
-            System.out.println(weatherSlot);
+            builder.append(weatherSlot + "\n");
         }
+        return builder.toString();
     }
-
 }
