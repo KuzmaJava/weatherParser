@@ -5,6 +5,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class Parser {
         setTimes(page, grayTimeElement);
         setTemperatures(page, temperatureSensElement);
         setHumidities(page, grayElement);
-        builder.append("Прогноз погоды для города " + city + "\n");
+        builder.append("Прогноз погоды для города " + city + " на " + LocalDate.now() + "\n");
         builder.append("__________________________________" + "\n");
         for (WeatherSlot weatherSlot : weatherSlots) {
             builder.append(weatherSlot + "\n");
